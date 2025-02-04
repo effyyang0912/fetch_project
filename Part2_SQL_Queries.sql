@@ -51,14 +51,14 @@ WITH Spending AS (
 ),
 Threshold AS (
     SELECT PERCENTILE_CONT(0.8) WITHIN GROUP (ORDER BY total_spent) AS top_20_spending
-    FROM UserSpending
+    FROM Spending
 )
-SELECT u.ID AS User_ID, u.STATE, u.LANGUAGE, us.total_spent, us.transaction_days
-FROM Spending us
-JOIN Users u ON us.USER_ID = u.ID
-WHERE us.total_spent >= (SELECT top_20_spending FROM Threshold)
-AND us.transaction_days > 1
-ORDER BY us.total_spent DESC
+SELECT u.ID AS User_ID, u.STATE, u.LANGUAGE, s.total_spent, s.transaction_days
+FROM Spending s
+JOIN Users u ON s.USER_ID = u.ID
+WHERE s.total_spent >= (SELECT top_20_spending FROM Threshold)
+AND s.transaction_days > 1
+ORDER BY s.total_spent DESC
 """
 
 
